@@ -1,0 +1,53 @@
+name: Speclink
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  speclink:
+    if: "!contains(github.event.head_commit.message, 'speclink')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install speclink
+
+      - name: Run analyze
+        env:
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          RERANK_MODEL: ${{ vars.RERANK_MODEL }}
+          RERANK_API_KEY: ${{ secrets.RERANK_API_KEY }}
+        run: speclink analyze
+
+      - name: Run sync
+        env:
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          RERANK_MODEL: ${{ vars.RERANK_MODEL }}
+          RERANK_API_KEY: ${{ secrets.RERANK_API_KEY }}
+          SYNC_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: speclink sync
+
+      - name: Commit results
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "docs: speclink analyze & sync"
+            git push origin HEAD:${{ github.head_ref }}
+          fi

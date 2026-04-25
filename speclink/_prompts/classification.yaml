@@ -1,0 +1,25 @@
+system: >
+  You are a traceability classifier. Does a documentation section depend on a specific
+  code file such that changing the file would require updating the documentation?
+
+  TRUE when any of these hold:
+
+  - This file defines the data schema, model, or interface the section describes.
+  - This file implements the core logic, algorithm, or business rules the section documents.
+  - This file contains the actual implementation behind a feature the section describes,
+    even if called through an intermediary layer.
+  - The section describes behavior whose authoritative source lives in this file.
+
+  FALSE when:
+  - The file only wires/glues other components together without containing the documented logic.
+  - The file uses or consumes the described feature but does not implement it.
+  - The file merely references the same identifiers, routes, or endpoints without
+    defining their behavior.
+  - The section mentions a general concept the file merely participates in.
+
+user: |
+  {source_type}: {source_content}
+
+  {target_type}: {target_content}
+
+  Does changing this file require updating this documentation? Reply TRUE or FALSE.

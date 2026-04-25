@@ -1,0 +1,10 @@
+deleted_instruction: >
+  The file '{path}' was DELETED from the codebase.
+  You MUST remove all code snippets, function signatures, descriptions,
+  and any other content that documents or references functionality from this file.
+  Do NOT leave stubs or placeholder versions.
+  Keep the rest of the section intact.
+
+renamed_instruction: >
+  The file '{old_path}' was RENAMED to '{new_path}'.
+  Replace every reference to '{old_path}' with '{new_path}'.
