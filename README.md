@@ -12,19 +12,25 @@ speclink/
 │   ├── models.py            # Modelos Pydantic (secciones, mapeos, config)
 │   ├── config.py            # Configuración del proyecto
 │   ├── paths.py             # Resolución de rutas
-│   └── store.py             # Persistencia del mapa de trazabilidad
+│   ├── store.py             # Persistencia del mapa de trazabilidad
+│   ├── llm.py               # Cliente LLM (LiteLLM + Instructor)
+│   └── logging.py           # Logging estructurado y CLI output
 ├── preprocessing/           # Parseo de entrada
 │   ├── markdown.py          # Extracción de secciones desde Markdown
 │   ├── code_extraction.py   # Extracción de símbolos con tree-sitter (Python, TS)
-│   ├── diff.py              # Detección de cambios entre commits
-│   └── incremental.py       # Actualización incremental del mapa
+│   └── code.py              # Utilidades de parseo de código
 ├── retrieval/               # Recuperación y clasificación
 │   ├── classifier.py        # Clasificación LLM (sección, archivo) → TRUE/FALSE
 │   ├── reranker.py          # Reranking de candidatos
-│   └── batch.py             # Procesamiento por lotes
-├── rewrite/                 # Reescritura de documentación
 │   ├── analyzer.py          # Análisis de impacto de cambios
-│   └── rewriter.py          # Reescritura con LLM
+│   ├── incremental.py       # Actualización incremental del mapa
+│   └── stages.py            # Orquestación de etapas del retrieval
+├── rewrite/                 # Reescritura de documentación
+│   ├── rewriter.py          # Reescritura con LLM
+│   ├── sync.py              # Sincronización docs-código
+│   ├── diff.py              # Detección de cambios entre commits
+│   ├── batch.py             # Procesamiento por lotes
+│   └── stages.py            # Orquestación de etapas de reescritura
 ├── _prompts/                # Plantillas de prompt para LiteLLM
 ├── _templates/              # Plantillas de GitHub Actions
 ├── cli.py                   # Interfaz CLI (Typer)
